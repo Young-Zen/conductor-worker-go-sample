@@ -1,0 +1,9 @@
+server:
+  port: 8080
+  basePath: /api/worker
+mysql:
+  host: ${MYSQL_HOST}
+  port: ${MYSQL_PORT}
+  schemas: worker
+  username: ${MYSQL_USERNAME}
+  password: ${MYSQL_PASSWORD}
