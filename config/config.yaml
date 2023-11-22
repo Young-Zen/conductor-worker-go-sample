@@ -7,3 +7,10 @@ mysql:
   schemas: worker
   username: ${MYSQL_USERNAME}
   password: ${MYSQL_PASSWORD}
+worker:
+  baseUrl: http://conductor-server:5000/api/
+  domain: local
+  pollingInterval: 1500ms
+  batchSize: 1
+  username: ${CONDUCTOR_USERNAME:conductor}
+  password: ${CONDUCTOR_PASSWORD:Conductor123}

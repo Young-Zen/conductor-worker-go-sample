@@ -8,6 +8,7 @@ import (
 	"worker-sample/config"
 	"worker-sample/database/mysql"
 	"worker-sample/server"
+	"worker-sample/worker"
 )
 
 // runCmd represents the run command
@@ -20,6 +21,8 @@ var runCmd = &cobra.Command{
 
 		mysql.InitDB(ctx)
 		defer mysql.CloseDB(ctx)
+
+		worker.InitWorker(ctx)
 
 		server.InitHttpServer(ctx)
 	},

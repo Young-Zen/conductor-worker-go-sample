@@ -1,17 +1,21 @@
 package config
 
 import (
+	"github.com/conductor-sdk/conductor-go/sdk/client"
+	"github.com/conductor-sdk/conductor-go/sdk/worker"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 
 type Config struct {
 	Server Server
 	MySQL  MySQL
+	Worker Worker
 }
 
 type Server struct {
@@ -27,9 +31,25 @@ type MySQL struct {
 	Password string
 }
 
+type Worker struct {
+	BaseUrl         string
+	Domain          string
+	PollingInterval time.Duration
+	BatchSize       int
+	Username        string
+	Password        string
+}
+
 type ServiceContext struct {
 	Config *Config
 	DB     *gorm.DB
+	Worker *ConductorWorker
+}
+
+type ConductorWorker struct {
+	APIClient      *client.APIClient
+	WorkflowClient *client.WorkflowResourceApiService
+	TaskRunner     *worker.TaskRunner
 }
 
 func NewServiceContext(configPath string, configName string) *ServiceContext {
@@ -62,6 +82,9 @@ func parseConfig(c *Config) {
 	c.MySQL.Port = evaluateConfig(c.MySQL.Port)
 	c.MySQL.Username = evaluateConfig(c.MySQL.Username)
 	c.MySQL.Password = evaluateConfig(c.MySQL.Password)
+	c.Worker.BaseUrl = evaluateConfig(c.Worker.BaseUrl)
+	c.Worker.Username = evaluateConfig(c.Worker.Username)
+	c.Worker.Password = evaluateConfig(c.Worker.Password)
 }
 
 var envVarReg = regexp.MustCompile("\\$\\{([^}]+)\\}")
