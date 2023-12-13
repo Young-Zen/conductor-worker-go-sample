@@ -42,7 +42,7 @@ func (w *WaitConductorWorkflowWorker) Execute(t *model.Task) (*model.TaskResult,
 
 	workflow, _, err := w.ServiceContext.Worker.WorkflowClient.GetExecutionStatus(context.Background(), workflowExecutionId, nil)
 	if err != nil {
-		return nil, err
+		return model.NewTaskResultFromTaskWithError(t, err), err
 	}
 
 	taskResult.Status = model.InProgressTask

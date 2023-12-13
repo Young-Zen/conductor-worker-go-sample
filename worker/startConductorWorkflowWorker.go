@@ -41,7 +41,7 @@ func (w *StartConductorWorkflowWorker) Execute(t *model.Task) (*model.TaskResult
 
 	workflowId, _, err := w.ServiceContext.Worker.WorkflowClient.StartWorkflow(context.Background(), make(map[string]interface{}), workflowName, nil)
 	if err != nil {
-		return nil, err
+		return model.NewTaskResultFromTaskWithError(t, err), err
 	}
 
 	taskResult.Status = model.CompletedTask
