@@ -1,10 +1,11 @@
-package worker
+package demo
 
 import (
 	"context"
 	"fmt"
 	"github.com/conductor-sdk/conductor-go/sdk/model"
 	log "github.com/sirupsen/logrus"
+	cw "worker-sample/conductor/worker"
 	"worker-sample/config"
 )
 
@@ -13,8 +14,8 @@ type WaitConductorWorkflowWorker struct {
 }
 
 func init() {
-	worker := NewWaitConductorWorkflowWorker()
-	workerMap[worker.GetTaskDefName()] = worker
+	waitConductorWorkflowWorker := NewWaitConductorWorkflowWorker()
+	cw.Register(waitConductorWorkflowWorker)
 }
 
 func NewWaitConductorWorkflowWorker() *WaitConductorWorkflowWorker {

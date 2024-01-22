@@ -1,9 +1,10 @@
-package worker
+package demo
 
 import (
 	"context"
 	"github.com/conductor-sdk/conductor-go/sdk/model"
 	log "github.com/sirupsen/logrus"
+	cw "worker-sample/conductor/worker"
 	"worker-sample/config"
 )
 
@@ -12,8 +13,8 @@ type StartConductorWorkflowWorker struct {
 }
 
 func init() {
-	worker := NewStartConductorWorkflowWorker()
-	workerMap[worker.GetTaskDefName()] = worker
+	startConductorWorkflowWorker := NewStartConductorWorkflowWorker()
+	cw.Register(startConductorWorkflowWorker)
 }
 
 func NewStartConductorWorkflowWorker() *StartConductorWorkflowWorker {

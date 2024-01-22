@@ -1,50 +1,15 @@
-package worker
+package conductor
 
 import (
 	"encoding/base64"
 	"fmt"
 	"github.com/conductor-sdk/conductor-go/sdk/client"
-	"github.com/conductor-sdk/conductor-go/sdk/model"
 	"github.com/conductor-sdk/conductor-go/sdk/settings"
 	"github.com/conductor-sdk/conductor-go/sdk/worker"
-	log "github.com/sirupsen/logrus"
-	"runtime/debug"
-	"time"
+	_ "worker-sample/conductor/demo"
+	cw "worker-sample/conductor/worker"
 	"worker-sample/config"
 )
-
-type Worker interface {
-	SetServiceContext(ctx *config.ServiceContext)
-	GetTaskDefName() string
-	Execute(t *model.Task) (*model.TaskResult, error)
-}
-
-func Wrap(worker Worker) model.ExecuteTaskFunction {
-	return func(t *model.Task) (taskResult interface{}, err error) {
-		defer func() {
-			if e := recover(); e != nil {
-				errStack := string(debug.Stack())
-				log.Errorf("Uncaught panic at WorkflowInstanceId %s TaskId %s, error: %+v, stack: %s", t.WorkflowInstanceId, t.TaskId, e, errStack)
-				tr := model.NewTaskResultFromTask(t)
-				tr.Status = model.FailedWithTerminalErrorTask
-				tr.ReasonForIncompletion = e.(error).Error()
-				tr.Logs = append(
-					tr.Logs,
-					model.TaskExecLog{
-						Log:         errStack,
-						TaskId:      t.TaskId,
-						CreatedTime: time.Now().UnixMilli(),
-					},
-				)
-				taskResult = tr
-			}
-		}()
-
-		return worker.Execute(t)
-	}
-}
-
-var workerMap = make(map[string]Worker)
 
 func InitWorker(ctx *config.ServiceContext) *config.ConductorWorker {
 	apiClient := newAPIClient(ctx)
@@ -60,9 +25,10 @@ func InitWorker(ctx *config.ServiceContext) *config.ConductorWorker {
 	ctx.Worker = conductorWorker
 
 	// Between polls if there are no tasks available to execute
+	workerMap := cw.GetAllRegisteredWorker()
 	for _, workerTask := range workerMap {
 		workerTask.SetServiceContext(ctx)
-		taskRunner.StartWorkerWithDomain(workerTask.GetTaskDefName(), Wrap(workerTask), ctx.Config.Worker.BatchSize, ctx.Config.Worker.PollingInterval, ctx.Config.Worker.Domain)
+		taskRunner.StartWorkerWithDomain(workerTask.GetTaskDefName(), cw.Wrap(workerTask), ctx.Config.Worker.BatchSize, ctx.Config.Worker.PollingInterval, ctx.Config.Worker.Domain)
 	}
 
 	return conductorWorker
