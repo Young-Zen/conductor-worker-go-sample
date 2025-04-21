@@ -28,7 +28,10 @@ func InitWorker(ctx *config.ServiceContext) *config.ConductorWorker {
 	workerMap := cw.GetAllRegisteredWorker()
 	for _, workerTask := range workerMap {
 		workerTask.SetServiceContext(ctx)
-		taskRunner.StartWorkerWithDomain(workerTask.GetTaskDefName(), cw.Wrap(workerTask), ctx.Config.Worker.BatchSize, ctx.Config.Worker.PollingInterval, ctx.Config.Worker.Domain)
+		err := taskRunner.StartWorkerWithDomain(workerTask.GetTaskDefName(), cw.Wrap(workerTask), ctx.Config.Worker.BatchSize, ctx.Config.Worker.PollingInterval, ctx.Config.Worker.Domain)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	return conductorWorker

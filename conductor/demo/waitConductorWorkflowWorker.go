@@ -47,14 +47,15 @@ func (w *WaitConductorWorkflowWorker) Execute(t *model.Task) (*model.TaskResult,
 	}
 
 	taskResult.Status = model.InProgressTask
-	if workflow.Status == model.RunningWorkflow || workflow.Status == model.PausedWorkflow {
+	switch workflow.Status {
+	case model.RunningWorkflow, model.PausedWorkflow:
 		taskResult.CallbackAfterSeconds = 10
-	} else if workflow.Status == model.CompletedWorkflow {
+	case model.CompletedWorkflow:
 		taskResult.Status = model.CompletedTask
-	} else if workflow.Status == model.TerminatedWorkflow {
+	case model.TerminatedWorkflow:
 		taskResult.Status = model.FailedWithTerminalErrorTask
 		taskResult.ReasonForIncompletion = fmt.Sprintf("Workflow %s execute failed: %s", workflowExecutionId, workflow.ReasonForIncompletion)
-	} else {
+	default:
 		taskResult.Status = model.FailedTask
 		taskResult.ReasonForIncompletion = fmt.Sprintf("Workflow %s execute failed: %s", workflowExecutionId, workflow.ReasonForIncompletion)
 	}

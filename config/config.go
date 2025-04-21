@@ -87,7 +87,7 @@ func parseConfig(c *Config) {
 	c.Worker.Password = evaluateConfig(c.Worker.Password)
 }
 
-var envVarReg = regexp.MustCompile("\\$\\{([^}]+)\\}")
+var envVarReg = regexp.MustCompile(`\$\{([^}]+)\}`)
 
 func evaluateConfig(val string) string {
 	return envVarReg.ReplaceAllStringFunc(val, func(s string) string {
