@@ -1,10 +1,11 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"worker-sample/config"
 	"worker-sample/server/model"
+
+	"github.com/gin-gonic/gin"
 )
 
 type HealthController struct {

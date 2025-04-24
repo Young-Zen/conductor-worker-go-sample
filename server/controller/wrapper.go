@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"worker-sample/server/model"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Controller func(ctx *gin.Context) model.Response

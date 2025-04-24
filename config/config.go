@@ -1,15 +1,16 @@
 package config
 
 import (
+	"os"
+	"regexp"
+	"strings"
+	"time"
+
 	"github.com/conductor-sdk/conductor-go/sdk/client"
 	"github.com/conductor-sdk/conductor-go/sdk/worker"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
-	"os"
-	"regexp"
-	"strings"
-	"time"
 )
 
 type Config struct {

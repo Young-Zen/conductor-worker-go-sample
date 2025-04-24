@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"worker-sample/config"
@@ -9,6 +8,8 @@ import (
 	"worker-sample/server/form"
 	"worker-sample/server/model"
 	"worker-sample/server/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserController struct {

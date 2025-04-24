@@ -2,9 +2,10 @@ package server
 
 import (
 	"fmt"
+	"worker-sample/config"
+
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
-	"worker-sample/config"
 )
 
 type HttpServer struct {

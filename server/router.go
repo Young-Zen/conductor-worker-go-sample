@@ -1,11 +1,12 @@
 package server
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 	"path"
 	"worker-sample/server/controller"
+
+	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func (s HttpServer) setUpRouter() {

@@ -2,10 +2,11 @@ package mysql
 
 import (
 	"fmt"
+	"worker-sample/config"
+
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"worker-sample/config"
 )
 
 func InitDB(ctx *config.ServiceContext) *gorm.DB {

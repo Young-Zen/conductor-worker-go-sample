@@ -3,10 +3,11 @@ package demo
 import (
 	"context"
 	"fmt"
-	"github.com/conductor-sdk/conductor-go/sdk/model"
-	log "github.com/sirupsen/logrus"
 	cw "worker-sample/conductor/worker"
 	"worker-sample/config"
+
+	"github.com/conductor-sdk/conductor-go/sdk/model"
+	log "github.com/sirupsen/logrus"
 )
 
 type WaitConductorWorkflowWorker struct {

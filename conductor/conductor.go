@@ -3,12 +3,13 @@ package conductor
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/conductor-sdk/conductor-go/sdk/client"
-	"github.com/conductor-sdk/conductor-go/sdk/settings"
-	"github.com/conductor-sdk/conductor-go/sdk/worker"
 	_ "worker-sample/conductor/demo"
 	cw "worker-sample/conductor/worker"
 	"worker-sample/config"
+
+	"github.com/conductor-sdk/conductor-go/sdk/client"
+	"github.com/conductor-sdk/conductor-go/sdk/settings"
+	"github.com/conductor-sdk/conductor-go/sdk/worker"
 )
 
 func InitWorker(ctx *config.ServiceContext) *config.ConductorWorker {

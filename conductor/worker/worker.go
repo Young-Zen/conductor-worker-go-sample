@@ -1,11 +1,12 @@
 package conductor
 
 import (
-	"github.com/conductor-sdk/conductor-go/sdk/model"
-	log "github.com/sirupsen/logrus"
 	"runtime/debug"
 	"time"
 	"worker-sample/config"
+
+	"github.com/conductor-sdk/conductor-go/sdk/model"
+	log "github.com/sirupsen/logrus"
 )
 
 type Worker interface {

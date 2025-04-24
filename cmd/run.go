@@ -4,11 +4,12 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/spf13/cobra"
 	"worker-sample/conductor"
 	"worker-sample/config"
 	"worker-sample/database/mysql"
 	"worker-sample/server"
+
+	"github.com/spf13/cobra"
 )
 
 // runCmd represents the run command
