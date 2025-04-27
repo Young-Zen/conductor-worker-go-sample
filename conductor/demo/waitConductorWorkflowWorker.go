@@ -3,6 +3,7 @@ package demo
 import (
 	"context"
 	"fmt"
+
 	cw "worker-sample/conductor/worker"
 	"worker-sample/config"
 
@@ -32,7 +33,13 @@ func (w *WaitConductorWorkflowWorker) GetTaskDefName() string {
 }
 
 func (w *WaitConductorWorkflowWorker) Execute(t *model.Task) (*model.TaskResult, error) {
-	log.Infof("WorkflowInstanceId: %s, TaskId: %s, Type: %s, TDN: %s", t.WorkflowInstanceId, t.TaskId, t.TaskType, t.TaskDefName)
+	log.Infof(
+		"WorkflowInstanceId: %s, TaskId: %s, Type: %s, TDN: %s",
+		t.WorkflowInstanceId,
+		t.TaskId,
+		t.TaskType,
+		t.TaskDefName,
+	)
 
 	taskResult := model.NewTaskResultFromTask(t)
 	workflowExecutionId, ok := t.InputData["workflowExecutionId"].(string)
@@ -42,7 +49,11 @@ func (w *WaitConductorWorkflowWorker) Execute(t *model.Task) (*model.TaskResult,
 		return taskResult, nil
 	}
 
-	workflow, _, err := w.ServiceContext.Worker.WorkflowClient.GetExecutionStatus(context.Background(), workflowExecutionId, nil)
+	workflow, _, err := w.ServiceContext.Worker.WorkflowClient.GetExecutionStatus(
+		context.Background(),
+		workflowExecutionId,
+		nil,
+	)
 	if err != nil {
 		return model.NewTaskResultFromTaskWithError(t, err), err
 	}
@@ -55,10 +66,18 @@ func (w *WaitConductorWorkflowWorker) Execute(t *model.Task) (*model.TaskResult,
 		taskResult.Status = model.CompletedTask
 	case model.TerminatedWorkflow:
 		taskResult.Status = model.FailedWithTerminalErrorTask
-		taskResult.ReasonForIncompletion = fmt.Sprintf("Workflow %s execute failed: %s", workflowExecutionId, workflow.ReasonForIncompletion)
+		taskResult.ReasonForIncompletion = fmt.Sprintf(
+			"Workflow %s execute failed: %s",
+			workflowExecutionId,
+			workflow.ReasonForIncompletion,
+		)
 	default:
 		taskResult.Status = model.FailedTask
-		taskResult.ReasonForIncompletion = fmt.Sprintf("Workflow %s execute failed: %s", workflowExecutionId, workflow.ReasonForIncompletion)
+		taskResult.ReasonForIncompletion = fmt.Sprintf(
+			"Workflow %s execute failed: %s",
+			workflowExecutionId,
+			workflow.ReasonForIncompletion,
+		)
 	}
 	return taskResult, nil
 }

@@ -2,6 +2,7 @@ package demo
 
 import (
 	"context"
+
 	cw "worker-sample/conductor/worker"
 	"worker-sample/config"
 
@@ -31,7 +32,13 @@ func (w *StartConductorWorkflowWorker) GetTaskDefName() string {
 }
 
 func (w *StartConductorWorkflowWorker) Execute(t *model.Task) (*model.TaskResult, error) {
-	log.Infof("WorkflowInstanceId: %s, TaskId: %s, Type: %s, TDN: %s", t.WorkflowInstanceId, t.TaskId, t.TaskType, t.TaskDefName)
+	log.Infof(
+		"WorkflowInstanceId: %s, TaskId: %s, Type: %s, TDN: %s",
+		t.WorkflowInstanceId,
+		t.TaskId,
+		t.TaskType,
+		t.TaskDefName,
+	)
 
 	taskResult := model.NewTaskResultFromTask(t)
 	workflowName, ok := t.InputData["workflowName"].(string)
@@ -41,7 +48,12 @@ func (w *StartConductorWorkflowWorker) Execute(t *model.Task) (*model.TaskResult
 		return taskResult, nil
 	}
 
-	workflowId, _, err := w.ServiceContext.Worker.WorkflowClient.StartWorkflow(context.Background(), make(map[string]interface{}), workflowName, nil)
+	workflowId, _, err := w.ServiceContext.Worker.WorkflowClient.StartWorkflow(
+		context.Background(),
+		make(map[string]interface{}),
+		workflowName,
+		nil,
+	)
 	if err != nil {
 		return model.NewTaskResultFromTaskWithError(t, err), err
 	}

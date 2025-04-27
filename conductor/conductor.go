@@ -3,6 +3,7 @@ package conductor
 import (
 	"encoding/base64"
 	"fmt"
+
 	_ "worker-sample/conductor/demo"
 	cw "worker-sample/conductor/worker"
 	"worker-sample/config"
@@ -29,7 +30,13 @@ func InitWorker(ctx *config.ServiceContext) *config.ConductorWorker {
 	workerMap := cw.GetAllRegisteredWorker()
 	for _, workerTask := range workerMap {
 		workerTask.SetServiceContext(ctx)
-		err := taskRunner.StartWorkerWithDomain(workerTask.GetTaskDefName(), cw.Wrap(workerTask), ctx.Config.Worker.BatchSize, ctx.Config.Worker.PollingInterval, ctx.Config.Worker.Domain)
+		err := taskRunner.StartWorkerWithDomain(
+			workerTask.GetTaskDefName(),
+			cw.Wrap(workerTask),
+			ctx.Config.Worker.BatchSize,
+			ctx.Config.Worker.PollingInterval,
+			ctx.Config.Worker.Domain,
+		)
 		if err != nil {
 			panic(err)
 		}
@@ -43,7 +50,10 @@ func newAPIClient(ctx *config.ServiceContext) *client.APIClient {
 		ctx.Config.Worker.BaseUrl,
 	)
 	if ctx.Config.Worker.Username != "" && ctx.Config.Worker.Password != "" {
-		httpSettings.Headers["Authorization"] = getAuthentication(ctx.Config.Worker.Username, ctx.Config.Worker.Password)
+		httpSettings.Headers["Authorization"] = getAuthentication(
+			ctx.Config.Worker.Username,
+			ctx.Config.Worker.Password,
+		)
 	}
 	return client.NewAPIClient(
 		nil,

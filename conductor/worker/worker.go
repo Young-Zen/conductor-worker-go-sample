@@ -3,6 +3,7 @@ package conductor
 import (
 	"runtime/debug"
 	"time"
+
 	"worker-sample/config"
 
 	"github.com/conductor-sdk/conductor-go/sdk/model"
@@ -20,7 +21,13 @@ func Wrap(worker Worker) model.ExecuteTaskFunction {
 		defer func() {
 			if e := recover(); e != nil {
 				errStack := string(debug.Stack())
-				log.Errorf("Uncaught panic at WorkflowInstanceId %s TaskId %s, error: %+v, stack: %s", t.WorkflowInstanceId, t.TaskId, e, errStack)
+				log.Errorf(
+					"Uncaught panic at WorkflowInstanceId %s TaskId %s, error: %+v, stack: %s",
+					t.WorkflowInstanceId,
+					t.TaskId,
+					e,
+					errStack,
+				)
 				tr := model.NewTaskResultFromTask(t)
 				tr.Status = model.FailedWithTerminalErrorTask
 				tr.ReasonForIncompletion = e.(error).Error()

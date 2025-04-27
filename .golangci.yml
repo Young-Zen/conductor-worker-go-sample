@@ -11,6 +11,7 @@ linters:
     - bodyclose
     - copyloopvar
     - errcheck
+    - funlen
     - gosec
     - govet
     - ineffassign
@@ -22,8 +23,24 @@ linters:
     - sqlclosecheck
     - staticcheck
     - testifylint
+    - unconvert
     - unparam
     - unused
+    - whitespace
+  # All available settings of specific linters.
+  settings:
+    funlen:
+      # Checks the number of lines in a function.
+      # If lower than 0, disable the check.
+      # Default: 60
+      lines: 80
+      # Checks the number of statements in a function.
+      # If lower than 0, disable the check.
+      # Default: 40
+      statements: -1
+      # Ignore comments when counting lines.
+      # Default: true
+      ignore-comments: true
 
 formatters:
   # Enable specific formatter.
@@ -31,6 +48,19 @@ formatters:
   enable:
     - gofmt
     - goimports
+    - golines
+  # Formatters settings.
+  settings:
+    goimports:
+      # A list of prefixes, which, if set, checks import paths
+      # with the given prefixes are grouped after 3rd-party packages.
+      # Default: []
+      local-prefixes:
+        - worker-sample
+    golines:
+      # Target maximum line length.
+      # Default: 100
+      max-len: 120
 
 # Options for analysis running.
 run:

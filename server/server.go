@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+
 	"worker-sample/config"
 
 	"github.com/gin-gonic/gin"
