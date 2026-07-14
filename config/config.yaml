@@ -2,13 +2,13 @@ server:
   port: 8080
   basePath: /api/worker
 mysql:
-  host: ${MYSQL_HOST}
-  port: ${MYSQL_PORT}
+  host: ${MYSQL_HOST:127.0.0.1}
+  port: ${MYSQL_PORT:3306}
   schemas: worker
-  username: ${MYSQL_USERNAME}
-  password: ${MYSQL_PASSWORD}
+  username: ${MYSQL_USERNAME:root}
+  password: ${MYSQL_PASSWORD:Mysql123Conductor}
 worker:
-  baseUrl: http://conductor-server:5000/api/
+  baseUrl: http://${CONDUCTOR_HOST:127.0.0.1}:${CONDUCTOR_PORT:5000}/api/
   domain: local
   pollingInterval: 1500ms
   batchSize: 1
